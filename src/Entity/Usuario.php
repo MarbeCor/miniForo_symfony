@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -36,6 +38,16 @@ class Usuario implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
      private $nombre;
+
+     /**
+      * @ORM\OneToMany(targetEntity="App\Entity\Publicacion", mappedBy="usuario", orphanRemoval=true)
+      */
+     private $publicacion;
+
+     public function __construct()
+     {
+         $this->publicacion = new ArrayCollection();
+     }
 
     /**
      * @return mixed
@@ -128,5 +140,36 @@ class Usuario implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Publicacion[]
+     */
+    public function getPublicacion(): Collection
+    {
+        return $this->publicacion;
+    }
+
+    public function addPublicacion(Publicacion $publicacion): self
+    {
+        if (!$this->publicacion->contains($publicacion)) {
+            $this->publicacion[] = $publicacion;
+            $publicacion->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removePublicacion(Publicacion $publicacion): self
+    {
+        if ($this->publicacion->contains($publicacion)) {
+            $this->publicacion->removeElement($publicacion);
+            // set the owning side to null (unless already changed)
+            if ($publicacion->getUsuario() === $this) {
+                $publicacion->setUsuario(null);
+            }
+        }
+
+        return $this;
     }
 }

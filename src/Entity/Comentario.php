@@ -21,6 +21,16 @@ class Comentario
      */
     private $autor;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $fecha;
+
+    /**
+     * @ORM\Column(type="string", length=600)
+     */
+    private $contenido;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +44,30 @@ class Comentario
     public function setAutor(string $autor): self
     {
         $this->autor = $autor;
+
+        return $this;
+    }
+
+    public function getFecha(): ?\DateTimeInterface
+    {
+        return $this->fecha;
+    }
+
+    public function setFecha(\DateTimeInterface $fecha): self
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    public function getContenido(): ?string
+    {
+        return $this->contenido;
+    }
+
+    public function setContenido(string $contenido): self
+    {
+        $this->contenido = $contenido;
 
         return $this;
     }

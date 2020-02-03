@@ -36,6 +36,18 @@ class Publicacion
      */
     private $titulo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="publicacions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categoria;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="publicacion")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $usuario;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +97,30 @@ class Publicacion
     public function setTitulo(string $titulo): self
     {
         $this->titulo = $titulo;
+
+        return $this;
+    }
+
+    public function getCategoria(): ?Categoria
+    {
+        return $this->categoria;
+    }
+
+    public function setCategoria(?Categoria $categoria): self
+    {
+        $this->categoria = $categoria;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): self
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }
