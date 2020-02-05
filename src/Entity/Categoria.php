@@ -26,11 +26,11 @@ class Categoria
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Publicacion", mappedBy="categoria")
      */
-    private $publicacions;
+    private $publicacion;
 
     public function __construct()
     {
-        $this->publicacions = new ArrayCollection();
+        $this->publicacion = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,15 +53,15 @@ class Categoria
     /**
      * @return Collection|Publicacion[]
      */
-    public function getPublicacions(): Collection
+    public function getPublicacion(): Collection
     {
-        return $this->publicacions;
+        return $this->publicacion;
     }
 
     public function addPublicacion(Publicacion $publicacion): self
     {
-        if (!$this->publicacions->contains($publicacion)) {
-            $this->publicacions[] = $publicacion;
+        if (!$this->publicacion->contains($publicacion)) {
+            $this->publicacion[] = $publicacion;
             $publicacion->setCategoria($this);
         }
 
@@ -70,8 +70,8 @@ class Categoria
 
     public function removePublicacion(Publicacion $publicacion): self
     {
-        if ($this->publicacions->contains($publicacion)) {
-            $this->publicacions->removeElement($publicacion);
+        if ($this->publicacion->contains($publicacion)) {
+            $this->publicacion->removeElement($publicacion);
             // set the owning side to null (unless already changed)
             if ($publicacion->getCategoria() === $this) {
                 $publicacion->setCategoria(null);

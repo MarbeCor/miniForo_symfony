@@ -31,6 +31,18 @@ class Comentario
      */
     private $contenido;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Publicacion", inversedBy="comentario")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $publicacion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="comentario")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $usuario;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +80,30 @@ class Comentario
     public function setContenido(string $contenido): self
     {
         $this->contenido = $contenido;
+
+        return $this;
+    }
+
+    public function getPublicacion(): ?Publicacion
+    {
+        return $this->publicacion;
+    }
+
+    public function setPublicacion(?Publicacion $publicacion): self
+    {
+        $this->publicacion = $publicacion;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): self
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }

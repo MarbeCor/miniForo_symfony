@@ -44,9 +44,15 @@ class Usuario implements UserInterface
       */
      private $publicacion;
 
+     /**
+      * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="usuario", orphanRemoval=true)
+      */
+     private $comentario;
+
      public function __construct()
      {
          $this->publicacion = new ArrayCollection();
+         $this->comentario = new ArrayCollection();
      }
 
     /**
@@ -167,6 +173,37 @@ class Usuario implements UserInterface
             // set the owning side to null (unless already changed)
             if ($publicacion->getUsuario() === $this) {
                 $publicacion->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comentario[]
+     */
+    public function getComentario(): Collection
+    {
+        return $this->comentario;
+    }
+
+    public function addComentario(Comentario $comentario): self
+    {
+        if (!$this->comentario->contains($comentario)) {
+            $this->comentario[] = $comentario;
+            $comentario->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComentario(Comentario $comentario): self
+    {
+        if ($this->comentario->contains($comentario)) {
+            $this->comentario->removeElement($comentario);
+            // set the owning side to null (unless already changed)
+            if ($comentario->getUsuario() === $this) {
+                $comentario->setUsuario(null);
             }
         }
 

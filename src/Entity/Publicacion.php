@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +39,7 @@ class Publicacion
     private $titulo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="publicacions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="publicacion")
      * @ORM\JoinColumn(nullable=false)
      */
     private $categoria;
@@ -47,6 +49,16 @@ class Publicacion
      * @ORM\JoinColumn(nullable=false)
      */
     private $usuario;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comentario", mappedBy="publicacion", orphanRemoval=true)
+     */
+    private $comentario;
+
+    public function __construct()
+    {
+        $this->comentario = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -121,6 +133,37 @@ class Publicacion
     public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comentario[]
+     */
+    public function getComentario(): Collection
+    {
+        return $this->comentario;
+    }
+
+    public function addComentario(Comentario $comentario): self
+    {
+        if (!$this->comentario->contains($comentario)) {
+            $this->comentario[] = $comentario;
+            $comentario->setPublicacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComentario(Comentario $comentario): self
+    {
+        if ($this->comentario->contains($comentario)) {
+            $this->comentario->removeElement($comentario);
+            // set the owning side to null (unless already changed)
+            if ($comentario->getPublicacion() === $this) {
+                $comentario->setPublicacion(null);
+            }
+        }
 
         return $this;
     }
